@@ -24,7 +24,7 @@ for page in range(16):
  
     # Make a GET request to the endpoint with the specified parameters
     response = requests.get(base_url, params=params)
-data/NYT/nyt.py data/youtube/youtube.py data/NYT/nyt_articles_sk.json data/NYT/nyt_articles_nk.json data/youtube/youtube_data.json
+
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
         # Parse the JSON response
