@@ -24,8 +24,6 @@ def get_abstracts(data, timestamps, file):
         for info in raw:
             data.append(info["title"])
             timestamps.append(info["publishTime"].split('T')[0])
-    print(data)
-    print(timestamps)
     f.close()
     return data,timestamps
 
@@ -65,7 +63,7 @@ def bool_search(data, timestamps):
             break
         else:
             for abstract in data:
-                if query.lower() in abstract:
+                if query.lower() in abstract.lower():
                     index = data.index(abstract)
                     results.append([abstract, timestamps[index]])
             if results == []:
@@ -82,7 +80,6 @@ def search(data, timestamps):
     if not data:
         return
     preprocessed_data = [preprocess_text(abstract) for abstract in data]
-    print(preprocessed_data)
 
     tfidf_matrix, vectorizer = vectorize_text(preprocessed_data)
 
