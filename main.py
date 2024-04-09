@@ -62,8 +62,10 @@ def bool_search(data, timestamps):
         if query.lower() == 'exit':
             break
         else:
+            query_words = query.lower().split(sep=" ")
+            print(query_words)
             for abstract in data:
-                if query.lower() in abstract.lower():
+                if all(word in abstract.lower() for word in query_words):
                     index = data.index(abstract)
                     results.append([abstract, timestamps[index]])
             if results == []:
