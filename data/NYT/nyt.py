@@ -12,13 +12,13 @@ base_url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'
 keyword = 'north korea'
 
 articles = []
-for page in range(16):
+for page in range(5):
     # Define the query parameters
     params = {
         'q': keyword,
         'api-key': API_KEY,
-        'begin_date': 20240101,
-        'end_date': 20240401,
+        'begin_date': 20240325,
+        'end_date': 20240408,
         'page': page
     }
  
@@ -35,7 +35,7 @@ for page in range(16):
 
         for doc in docs:
             article = {
-                'abstract': doc.get('abstract', ''),
+                'abstract': doc.get('headline', {}).get('main', ''),
                 'pub_date': doc.get('pub_date', '')
             }
             articles.append(article)
@@ -49,7 +49,7 @@ for page in range(16):
         break  # Break out of the loop if an unexpected error occurs
 
 # Save the articles to a new JSON file
-json_file_path = 'nyt_articles_sk.json'
+json_file_path = 'nyt_articles_nk.json'
 with open(json_file_path, 'w') as json_file:
     json.dump(articles, json_file, indent=2)
 

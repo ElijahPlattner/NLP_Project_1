@@ -13,8 +13,8 @@ keyword = 'south korea'
 params = {
     'q': keyword,
     'api-key': API_KEY,
-    'begin_date': 20240101,
-    'end_date':20240401
+    'begin_date': 20240325,
+    'end_date':20240408
 }
 
 # Make a GET request to the endpoint with the specified parameters

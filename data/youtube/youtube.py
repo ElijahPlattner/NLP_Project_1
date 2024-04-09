@@ -5,14 +5,14 @@ api_key = 'AIzaSyDgWWxgNb_2-x5stWsI14xUujW8qIYP_n4'
 
 youtube = build('youtube', 'v3', developerKey=api_key)
 
-request = youtube.search().list(
-    part="snippet",
-    q="south korea",
-    type="video",
-    videoDuration="medium",
-    publishedAfter="2024-03-01T00:00:00Z",
-    maxResults=50
-)
+# request = youtube.search().list(
+#     part="snippet",
+#     q="north korea",
+#     type="video",
+#     videoDuration="medium",
+#     publishedAfter="2024-03-25T00:00:00Z",
+#     maxResults=50
+# )
 
 nextPageToken = ""
 videos = []
@@ -22,7 +22,7 @@ for page in range(5):
         q="north korea",
         type="video",
         videoDuration="medium",
-        publishedAfter="2024-04-01T00:00:00Z",
+        publishedAfter="2024-03-25T00:00:00Z",
         maxResults=50,
         pageToken=nextPageToken
     )
@@ -44,7 +44,7 @@ for page in range(5):
 
 
 # Save the data to a new JSON file
-json_file_path = 'youtube_data.json'
+json_file_path = 'youtube_data_nk.json'
 with open(json_file_path, 'w') as json_file:
     json.dump(videos, json_file, indent=2)
 
