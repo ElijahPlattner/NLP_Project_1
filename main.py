@@ -53,30 +53,65 @@ def find_similar_post(query, tfidf_matrix, vectorizer, posts, timestamps):
     sorted_posts = [(posts[index], timestamps[index]) for index in sorted_indices]
     return sorted_posts
 
+def split_query(query):
+    query = query.lower().split()
+    operators = ['and', 'or', 'not']
+    sublist_count = sum(1 for word in query if word in operators)
+    keywords = [[] for i in range(sublist_count+1)]
+    oper = []
+    i = 0
+    for word in query:
+        if word not in operators:
+            keywords[i].append(word)
+        else:
+            oper.append(word)
+            i+=1
+    return keywords, oper
+
+def and_operation(words, abstracts):
+    results = [abstract for abstract in abstracts if all(word in abstract.lower() for word in words)]
+    return results
+
+def not_operation(words, abstracts):
+    results = [abstract for abstract in abstracts if all(word not in abstract.lower() for word in words)]
+    return results
+
+def or_operation(words, abstracts, data):
+    results2 = []
+    for abstract in data:
+        if all(word in abstract.lower() for word in words):
+            results2.append(abstract)
+    results = list(set(results2) | set(abstracts))
+    return results
+
 def bool_search(data, timestamps):
     if not data:
         return
     while True:
         query = input("Enter your query (type 'exit' to quit): ")
-        results=[]
+        results = []
         if query.lower() == 'exit':
             break
         else:
-            query_words = query.lower().split(sep=" ")
-            print(query_words)
+            query_words, operators = split_query(query)
             for abstract in data:
-                if all(word in abstract.lower() for word in query_words):
-                    index = data.index(abstract)
-                    results.append([abstract, timestamps[index]])
-            if results == []:
+                if all(word in abstract.lower() for word in query_words[0]):
+                    results.append(abstract)
+            for list in query_words[1::]:
+                i = query_words.index(list)
+                if operators[i-1] == "and":
+                    results = and_operation(list, results)
+                elif operators[i-1] == "not":
+                    results = not_operation(list, results)
+                else:
+                    results = or_operation(list, results, data)
+            if not results:
                 print("No relevant articles found.")
             else:
                 print("\nRelevant articles:")
                 for i, result in enumerate(results):
-                    print(f"{i + 1}. Abstract: {result[0]} Published: {result[1]}")
-            return results
-
-
+                    index = data.index(result)
+                    print(f"{i + 1}. Abstract: {result} Published: {timestamps[index]}")
 
 def search(data, timestamps):
     if not data:
